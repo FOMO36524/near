@@ -29,7 +29,7 @@ let echartEvent=function(data){
                         position: 'center',
                         color: '#fff',
                         fontSize: 14,
-                        formatter: data[0]/data[1]+'%' // {b}:数据名； {c}：数据值； {d}：百分比，可以自定义显示内容，
+                        formatter: (data[0]/data[1]).toFixed(3)+'%' // {b}:数据名； {c}：数据值； {d}：百分比，可以自定义显示内容，
                     }
                 },
                 // label: {

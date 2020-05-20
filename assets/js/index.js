@@ -14,9 +14,10 @@ let dialogEvent=function(data){
 };
 let formattedNumber=function(num) {
     var num = (num || 0).toString();
+    var len= parseInt(num.length)-2
     var result = '';
-    while (num.length > 6) {
-        result = ' . ' + num.slice(-2) + result;
+    while (num.length > 4) {
+        result = ' , ' + num.slice(-2) + result;
         num = num.slice(0, num.length - 2);
     }
     if (num) { result = num + result; }
@@ -113,75 +114,115 @@ let getEpochHeight=new Promise(function(resolve, reject){
         }
     });
 });
-let depositEvent=new Promise(function(resolve, reject){
+let depositEvent=function(resolve, reject){
     let accountType=$(".accountType").attr('data-type');
     let layerValTest=$(".layerValTest").val();
-    console.log(accountType,layerValTest);
-    // window.contract.deposit({}).then(res => {
-    //     if (res.length != 0) {
-    //         resolve(res)
-    //     } else {
-    //         console.log('error');
-    //         dialogEvent('get_epoch_height is error');
-    //     }
-    // });
-});
-let contractEvent=new Promise(function(resolve, reject){
-    let accountType=$(".accountType").attr('data-type');
-    let layerValTest=$(".layerValTest").val();
-    // console.log(accountType,layerValTest);
-    // window.contract.Contract({'accountId':user,'amount':100}).then(res => {
-    //     if (res.length != 0) {
-    //         resolve(res)
-    //     } else {
-    //         console.log('error');
-    //         dialogEvent('get_epoch_height is error');
-    //     }
-    // });
-});
+    let at='000000000000000000000000';
+    let loading = $(document).dialog({
+        type: "toast",
+        infoIcon: "./assets/images/loading.gif",
+        infoText: "加载中"
+    });
+    setTimeout(function(){
+        loading.close()
+    },10000);
+
+    switch (accountType) {
+        case 'Deposit':
+            window.contract.deposit({}, gas, layerValTest+at).then(res => {
+                if (res.length != 0) {
+                    console.log(res)
+                } else {
+                    console.log('error');
+                    dialogEvent('get_epoch_height is error');
+                }
+                loading.close();
+            });
+            break;
+        case 'Withdraw':
+            window.contract.withdraw({"amount":layerValTest+at},gas).then(res => {
+                console.log(res)
+                if (res.length != 0) {
+                    console.log(res)
+                } else {
+                    console.log('error');
+                    dialogEvent('withdraw is error');
+                }
+                loading.close();
+            });
+            break;
+        case 'Stake':
+            window.contract.stake({"amount":layerValTest+at},gas).then(res => {
+                console.log(res)
+                if (res.length != 0) {
+                    console.log(res)
+                } else {
+                    console.log('error');
+                    dialogEvent('stake is error');
+                }
+                loading.close();
+            });
+            break;
+        case 'Unstake':
+            window.contract.unstake({"amount":layerValTest+at},gas).then(res => {
+                console.log(res)
+                if (res.length != 0) {
+                    console.log(res)
+                } else {
+                    console.log('error');
+                    dialogEvent('unstake is error');
+                }
+                loading.close();
+            });
+            break;
+        default:
+            dialogEvent('error');
+
+    }
+
+};
 $(function(){
-    console.log(wallet)
+    // near detail
+    // console.log(wallet)
+    // wallet.account().state().then(data => {
+    //     console.log(data)
+    // });
 
     //name
     $(".boxTopIcon").text(userName);
 
-    //
-    wallet.account().state().then(data => {
-        console.log(data)
-    });
-
     //可用量
     let available=getAccountUnstakedBalance.then(res=>{
         // console.log(res);
-        $(".Available").text(res);
+        $(".Available").text(formattedNumber(res.substr(0,6)));
         return res
     });
 
     //抵押份额
     let stakedShare=getAccountStakedShare.then(res=>{
         // console.log(res);
-        $(".StakingShare").text(res);
+        $(".StakingShare").text(formattedNumber(res.substr(0,6)));
         return res
     });
 
     //抵押量
     let stakedBalance=getAccountStakedBalance.then(res=>{
         // console.log(res);
-        $(".StakingBalance").text(res);
+        $(".StakingBalance").text(formattedNumber(res.substr(0,6)));
         return res
     });
 
     //总权益
     let totalBalance=getAccountTotalBalance.then(res=>{
         // console.log(res);
-        $(".TotalBalance").text(res);
+        $(".TotalBalance").text(formattedNumber(res.substr(0,6)));
         return res
     });
 
     //总抵押份额
     let totalShare=getTotalShare.then(res=>{
         // console.log(res);
-        $(".TotalShare").text(formattedNumber(res.substr(0,8)));
+        $(".TotalShare").text(formattedNumber(res.substr(0,6)));
         return res
     });
 
@@ -205,9 +246,6 @@ $(function(){
         return tas;
 
     });
-    scale.then(res=>{
-        $(".scale").text(res+'%');
-    });
 
     //池区
     window.contract.get_owner_id({}).then(res => {
@@ -222,7 +260,7 @@ $(function(){
     //总抵押量
     let totalStaking=getTotalStakedBalance.then(res=>{
         // console.log(res);
-        $(".TotalStaking").text(formattedNumber(res.substr(0,8)));
+        $(".TotalStaking").text(formattedNumber(res.substr(0,6)));
         return res
     });
 
@@ -243,24 +281,7 @@ $(function(){
         return res
     });
 
-    //充值
-    $(".uploadBtn").click(function(){
-        // let accountType=$(".accountType").attr('data-type');
-        // let layerValTest=$(".layerValTest").val();
-        // console.log(accountType,layerValTest)
-        // depositEvent.then(res=>{
-        //     console.log(res)
-        // });
-    });
-
-    //
-    // contractEvent.then(res=>{
-    //     console.log(res)
-    // });
-
-
-    //新增
-
+    //withdrawEpoch--curEpoch
     getUnstakedAvailableEpochHeight.then(res=>{
         $(".withdrawEpoch").text(res);
     });
@@ -268,7 +289,7 @@ $(function(){
         $(".curEpoch").text(res);
     });
 
-    //四个按钮
+    //充值转账
     $(".buttonListIcon").each(function(){
         $(this).click(function(){
             let type=$(this).attr('data-type');
@@ -324,13 +345,6 @@ $(function(){
 
         })
     });
-    // $(".uploadBtn").unbind('click').click(function(){
-    //     let layerValTest=$(".layerValTest").val();
-    //     if(layerValTest==''){
-    //         dialogEvent('请填写数值');
-    //         return false
-    //     }
-    // });
     $(".layerWrap").click(function(){
         $(".layerWrap").hide();
     });
@@ -339,5 +353,14 @@ $(function(){
     });
     $(".layerTop button").click(function(){
         $(".layerWrap").hide();
+    });
+    $(".uploadBtn").unbind('click').click(function(){
+        let layerValTest=$(".layerValTest").val();
+        if(layerValTest==''){
+            dialogEvent('请填写数值');
+            return false
+        }else {
+            depositEvent();
+        }
     });
 });
