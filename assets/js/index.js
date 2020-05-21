@@ -196,35 +196,35 @@ $(function(){
     //可用量
     let available=getAccountUnstakedBalance.then(res=>{
         // console.log(res);
-        $(".Available").text(formattedNumber(res.substr(0,6)));
+        $(".Available").text((parseInt(res)/radix).toFixed(2));
         return res
     });
 
     //抵押份额
     let stakedShare=getAccountStakedShare.then(res=>{
         // console.log(res);
-        $(".StakingShare").text(formattedNumber(res.substr(0,6)));
+        $(".StakingShare").text((parseInt(res)/radix).toFixed(2));
         return res
     });
 
     //抵押量
     let stakedBalance=getAccountStakedBalance.then(res=>{
         // console.log(res);
-        $(".StakingBalance").text(formattedNumber(res.substr(0,6)));
+        $(".StakingBalance").text((parseInt(res)/radix).toFixed(2));
         return res
     });
 
     //总权益
     let totalBalance=getAccountTotalBalance.then(res=>{
         // console.log(res);
-        $(".TotalBalance").text(formattedNumber(res.substr(0,6)));
+        $(".TotalBalance").text((parseInt(res)/radix).toFixed(2));
         return res
     });
 
     //总抵押份额
     let totalShare=getTotalShare.then(res=>{
         // console.log(res);
-        $(".TotalShare").text(formattedNumber(res.substr(0,6)));
+        $(".TotalShare").text((parseInt(res)/radix).toFixed(2));
         return res
     });
 
@@ -262,7 +262,7 @@ $(function(){
     //总抵押量
     let totalStaking=getTotalStakedBalance.then(res=>{
         // console.log(res);
-        $(".TotalStaking").text(formattedNumber(res.substr(0,6)));
+        $(".TotalStaking").text((parseInt(res)/radix).toFixed(2));
         return res
     });
 
@@ -301,7 +301,7 @@ $(function(){
             let StakingBalance=$(".StakingBalance").text();
 
             await wallet.account().state().then(data => {
-                console.log(data)
+                // console.log(data)
                 Available=(parseInt(data.amount)/radix).toFixed(2)
             });
 
