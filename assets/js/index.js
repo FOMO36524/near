@@ -1,6 +1,7 @@
 
 const user=wallet.getAccountId();
 const userName=wallet.getAccountId().split('.')[0];
+const radix=Math.pow(10,24);
 
 let dialogEvent=function(data){
     $(document).dialog({
@@ -183,9 +184,10 @@ let depositEvent=function(resolve, reject){
 };
 $(function(){
     // near detail
-    // console.log(wallet)
+    console.log(wallet)
     // wallet.account().state().then(data => {
     //     console.log(data)
+    //     console.log(data.amount/Math.pow(10,24))
     // });
 
     //name
@@ -291,12 +293,17 @@ $(function(){
 
     //充值转账
     $(".buttonListIcon").each(function(){
-        $(this).click(function(){
+        $(this).click(async function(){
             let type=$(this).attr('data-type');
             let user=$(".boxTopIcon").text();
             let Available=$(".Available").text();
             let StakingShare=$(".StakingShare").text();
             let StakingBalance=$(".StakingBalance").text();
+
+            await wallet.account().state().then(data => {
+                console.log(data)
+                Available=(parseInt(data.amount)/radix).toFixed(2)
+            });
 
             switch(type) {
                 case 'Deposit':
