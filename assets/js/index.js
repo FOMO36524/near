@@ -3,13 +3,14 @@ const user=wallet.getAccountId();
 const userName=wallet.getAccountId().split('.')[0];
 const radix=Math.pow(10,24);
 
-let dialogEvent=function(data){
-    $(document).dialog({
-        type: "notice",
-        infoText: data,
-        autoClose: 1500,
-        onClosed: () => {
-            console.log('dialog')
+let layerEvent=function(data){
+    layer.open({
+        content: data
+        ,skin: 'msg'
+        ,time: 2 //2秒后自动关闭
+        ,end: function(){
+            console.log('456')
+            layer.closeAll()
         }
     });
 };
@@ -31,7 +32,7 @@ let getAccountUnstakedBalance=new Promise(function(resolve, reject){
             resolve(res)
         } else {
             console.log('error');
-            dialogEvent('get_account_unstaked_balance is error');
+            layerEvent('get_account_unstaked_balance is error');
         }
     });
 });
@@ -41,7 +42,7 @@ let getAccountStakedShare=new Promise(function(resolve, reject){
             resolve(res)
         } else {
             console.log('error');
-            dialogEvent('get_account_staked_share is error');
+            layerEvent('get_account_staked_share is error');
         }
     });
 });
@@ -51,7 +52,7 @@ let getAccountStakedBalance=new Promise(function(resolve, reject){
             resolve(res)
         } else {
             console.log('error');
-            dialogEvent('get_account_staked_balance is error');
+            layerEvent('get_account_staked_balance is error');
         }
     });
 });
@@ -61,7 +62,7 @@ let getAccountTotalBalance=new Promise(function(resolve, reject){
             resolve(res)
         } else {
             console.log('error');
-            dialogEvent('get_account_total_balance is error');
+            layerEvent('get_account_total_balance is error');
         }
     });
 });
@@ -71,7 +72,7 @@ let getTotalShare=new Promise(function(resolve, reject){
             resolve(res)
         } else {
             console.log('error');
-            dialogEvent('get_total_share is error');
+            layerEvent('get_total_share is error');
         }
     });
 });
@@ -81,7 +82,7 @@ let getTotalStakedBalance=new Promise(function(resolve, reject){
             resolve(res)
         } else {
             console.log('error');
-            dialogEvent('get_total_staked_balance is error');
+            layerEvent('get_total_staked_balance is error');
         }
     });
 });
@@ -91,7 +92,7 @@ let getRewardFeeFraction=new Promise(function(resolve, reject){
             resolve(res)
         } else {
             console.log('error');
-            dialogEvent('get_reward_fee_fraction is error');
+            layerEvent('get_reward_fee_fraction is error');
         }
     });
 });
@@ -101,7 +102,7 @@ let getUnstakedAvailableEpochHeight=new Promise(function(resolve, reject){
             resolve(res)
         } else {
             console.log('error');
-            dialogEvent('get_unstaked_available_epoch_height is error');
+            layerEvent('get_unstaked_available_epoch_height is error');
         }
     });
 });
@@ -111,73 +112,79 @@ let getEpochHeight=new Promise(function(resolve, reject){
             resolve(res)
         } else {
             console.log('error');
-            dialogEvent('get_epoch_height is error');
+            layerEvent('get_epoch_height is error');
         }
     });
 });
-let depositEvent=function(resolve, reject){
+let depositEvent=function(){
     let accountType=$(".accountType").attr('data-type');
     let layerValTest=$(".layerValTest").val();
     let at='000000000000000000000000';
-    let loading = $(document).dialog({
-        type: "toast",
-        infoIcon: "./assets/images/loading.gif",
-        infoText: "加载中"
-    });
-    setTimeout(function(){
-        loading.close()
-    },10000);
+
+    layer.open({type: 2});
+    // setTimeout(function(){
+    //     layer.closeAll()
+    // },10000);
 
     switch (accountType) {
         case 'Deposit':
             window.contract.deposit({}, gas, layerValTest+at).then(res => {
+                // console.log(res);
                 if (res.length != 0) {
-                    console.log(res)
+                    layer.closeAll();
+                    layerEvent('get_epoch_height is error');
                 } else {
-                    console.log('error');
-                    dialogEvent('get_epoch_height is error');
+                    layerEvent('Deposit is ok');
+                    setTimeout(function(){
+                        location.reload();
+                    },1500)
                 }
-                loading.close();
             });
             break;
         case 'Withdraw':
             window.contract.withdraw({"amount":layerValTest+at},gas).then(res => {
-                console.log(res)
+                // console.log(res)
                 if (res.length != 0) {
-                    console.log(res)
+                    layer.closeAll();
+                    layerEvent('withdraw is error');
                 } else {
-                    console.log('error');
-                    dialogEvent('withdraw is error');
+                    layerEvent('Withdraw is ok');
+                    setTimeout(function(){
+                        location.reload();
+                    },1500)
                 }
-                loading.close();
             });
             break;
         case 'Stake':
             window.contract.stake({"amount":layerValTest+at},gas).then(res => {
                 console.log(res)
                 if (res.length != 0) {
-                    console.log(res)
+                    layerEvent('stake is error');
                 } else {
-                    console.log('error');
-                    dialogEvent('stake is error');
+                    layerEvent('Stake is ok');
+                    setTimeout(function(){
+                        location.reload();
+                    },1500)
                 }
-                loading.close();
+                // layer.closeAll()
             });
             break;
         case 'Unstake':
             window.contract.unstake({"amount":layerValTest+at},gas).then(res => {
-                console.log(res)
+                // console.log(res)
                 if (res.length != 0) {
-                    console.log(res)
+                    layerEvent('unstake is error');
                 } else {
-                    console.log('error');
-                    dialogEvent('unstake is error');
+                    layerEvent('Unstake is ok');
+                    setTimeout(function(){
+                        location.reload();
+                    },1500)
                 }
-                loading.close();
+                // layer.closeAll()
             });
             break;
         default:
-            dialogEvent('error');
+            layerEvent('error');
 
     }
 
@@ -185,10 +192,10 @@ let depositEvent=function(resolve, reject){
 $(function(){
     // near detail
     console.log(wallet)
-    // wallet.account().state().then(data => {
-    //     console.log(data)
-    //     console.log(data.amount/Math.pow(10,24))
-    // });
+    wallet.account().state().then(data => {
+        console.log(data)
+        // console.log(data.amount/Math.pow(10,24))
+    });
 
     //name
     $(".boxTopIcon").text(userName);
@@ -255,7 +262,7 @@ $(function(){
             $(".Onwer").text(res);
         } else {
             console.log('error');
-            dialogEvent('get_owner_id is error');
+            layerEvent('get_owner_id is error');
         }
     });
 
@@ -274,7 +281,7 @@ $(function(){
 
     });
     sharePrice.then(res=>{
-        $(".SharePrice").text(res);
+        $(".SharePrice").text((parseInt(res)).toFixed(2));
     });
 
     //抽成比例
@@ -298,50 +305,67 @@ $(function(){
             let user=$(".boxTopIcon").text();
             let Available=$(".Available").text();
             let StakingShare=$(".StakingShare").text();
-            let StakingBalance=$(".StakingBalance").text();
+            let innerAccount;
 
             await wallet.account().state().then(data => {
                 // console.log(data)
-                Available=(parseInt(data.amount)/radix).toFixed(2)
+                innerAccount=(parseInt(data.amount)/radix).toFixed(2)
             });
+
+            $(".layerValTest").val('');
+
 
             switch(type) {
                 case 'Deposit':
                     $(".neTag1").attr('src','assets/images/ne03.png');
                     $(".neTag2").attr('src','assets/images/ne01.png');
-                    $(".isShow").hide();
+                    // $(".isShow").hide();
 
-                    $(".AvailableB").text(Available);
-                    $(".StakingShareB").text(StakingShare);
+                    $(".fromName").text(userName);
+                    $(".toName").text('Inner account');
+                    $(".layerWriteName").text('Deposit amount');
+
+                    $(".fromBalanceQuantity").text(innerAccount);
+                    $(".toBalanceQuantity").text(Available);
                     break;
                 case 'Withdraw':
                     $(".neTag1").attr('src','assets/images/ne01.png');
                     $(".neTag2").attr('src','assets/images/ne03.png');
-                    $(".isShow").hide();
+                    // $(".isShow").hide();
 
-                    $(".AvailableB").text(Available);
-                    $(".StakingShareB").text(StakingShare);
+                    $(".fromName").text('Inner account');
+                    $(".toName").text(userName);
+                    $(".layerWriteName").text('Withdraw amount');
+
+                    $(".fromBalanceQuantity").text(Available);
+                    $(".toBalanceQuantity").text(innerAccount);
                     break;
                 case 'Stake':
                     $(".neTag1").attr('src','assets/images/ne01.png');
                     $(".neTag2").attr('src','assets/images/ne04.png');
-                    $(".isShow").show();
+                    // $(".isShow").show();
 
-                    $(".AvailableB").text(Available);
-                    $(".StakingShareB").text(StakingShare);
-                    $(".StakingPriceB").text(StakingBalance);
+                    $(".fromName").text('Inner account');
+                    $(".toName").text('Staking share');
+                    $(".layerWriteName").text('Stake amount');
+
+                    $(".fromBalanceQuantity").text(Available);
+                    $(".toBalanceQuantity").text(StakingShare);
                     break;
                 case 'Unstake':
                     $(".neTag1").attr('src','assets/images/ne04.png');
                     $(".neTag2").attr('src','assets/images/ne01.png');
-                    $(".isShow").show();
+                    // $(".isShow").show();
 
-                    $(".AvailableB").text(Available);
-                    $(".StakingShareB").text(StakingShare);
-                    $(".StakingPriceB").text(StakingBalance);
+                    $(".fromName").text('Staking share');
+                    $(".toName").text('Inner account');
+                    $(".layerWriteName").text('Unstake amount');
+
+                    $(".fromBalanceQuantity").text(StakingShare);
+                    $(".toBalanceQuantity").text(Available);
                     break;
                 default:
-                    dialogEvent('error');
+                    layerEvent('error');
             }
             $(".layerWrap").show();
 
@@ -364,10 +388,30 @@ $(function(){
     $(".uploadBtn").unbind('click').click(function(){
         let layerValTest=$(".layerValTest").val();
         if(layerValTest==''){
-            dialogEvent('请填写数值');
+            layerEvent('请填写数值');
             return false
         }else {
             depositEvent();
         }
     });
+    $(".layerValTest").bind({
+        keyup:function(){
+            let initVal=parseInt($(this).val());
+            let nearVal=parseInt($(".AvailableB").text());
+            // console.log(initVal,nearVal);
+            // if(initVal>nearVal){
+            //     $(this).val('');
+            //     layerEvent('数值不能大于余额');
+            // }
+        },
+        onpause:function(){
+            let initVal=parseInt($(this).val());
+            let nearVal=parseInt($(".AvailableB").text());
+            // console.log(initVal,nearVal);
+            // if(initVal>nearVal){
+            //     $(this).val('');
+            //     layerEvent('数值不能大于余额');
+            // }
+        }
+    })
 });

@@ -65,6 +65,30 @@
     color:#fff;
     /*width:2rem;*/
     padding-left:.4rem;
+    position:relative;
+}
+.nicon:after{
+    content:'\20';
+    display:block;
+    width:.18rem;
+    height:.18rem;
+    background:url("../images/nicon.png") no-repeat center;
+    background-size:contain;
+    position:absolute;
+    right:-.34rem;
+    top:50%;
+    margin-top:-.09rem;
+}
+.nicon3 span,.nicon3 i{
+    display:inline-block;
+    vertical-align:middle;
+}
+.nicon3 i{
+    width:.24rem;
+    height:.24rem;
+    background:url("../images/nicon3.png") no-repeat center;
+    background-size:contain;
+    margin-left:.14rem;
 }
 .BTLeftBor{
     width:2rem;
@@ -165,6 +189,7 @@
 }
 .owImg span{
     display:inline-block;
+    max-width:4.2rem;
     padding-left:.57rem;
     font-size:.32rem;
     line-height:.44rem;
@@ -236,6 +261,13 @@
     font-weight:bold;
     color:#fff;
     padding-left:.44rem;
+    position:relative;
+}
+.totalist div span.nicon{
+    padding-right:.4rem;
+}
+.totalist div span.nicon:after{
+    right:0;
 }
 
 /*弹层*/
@@ -252,7 +284,7 @@
     border-top-left-radius:.7rem;
     border-top-right-radius:.7rem;
     background-color:#fff;
-    padding:.6rem .6rem 0;
+    padding:.36rem 1.16rem 0;
 }
 .layerTop{
     position:relative;
@@ -265,6 +297,8 @@
     background-repeat:no-repeat;
     background-position:center;
     background-size:contain;
+    position:relative;
+    margin-left:-.46rem;
 }
 .layerTop button{
     display: inline-block;
@@ -273,28 +307,76 @@
     background:url("../images/close01.png") no-repeat center;
     background-size:contain;
     position:absolute;
-    right:0;top:50%;
+    right:-.56rem;top:50%;
     margin-top:-.15rem;
 }
 .layerStatusWrap{
     display:flex;
-    justify-content:center;
-    align-items:center;
+    justify-content:space-between;
+    align-items:start;
     flex-wrap:nowrap;
-    padding-top:.14rem;
+    padding-top:.64rem;
+    margin:0 -.24rem 0 -.24rem;
 }
 .layerStatusList{
-    width:1.1rem;
-    margin:0 .34rem;
+    width:1.14rem;
+    text-align:center;
+    font-size:0;
 }
 .layerStatusList img{
-    width:100%;
+    display:inline-block;
+    width:1.14rem;
     height:auto;
 }
 .layerStatusList.on{
-    width:1.52rem;
+    width:1.8rem;
     margin:0;
 }
+.layerStatusList.on img{
+    width:1.52rem;
+}
+.layerTestTitle{
+    font-size:.18rem;
+    line-height:.4rem;
+    text-align:center;
+    color:#b3b3b3;
+    font-family: arial;
+}
+.layerTestDetail{
+    font-size:.3rem;
+    line-height:.54rem;
+    text-align:center;
+    color:#5b5b5b;
+    font-family: arial;
+    position:relative;
+}
+.layerWriteWrap{
+    padding-top:.76rem;
+}
+.layerWriteName{
+    font-size:.28rem;
+    color:#5b5b5b;
+    line-height:.94rem;
+    border-bottom:1px solid #F2F2F2;
+    font-family: arial;
+}
+.layerTestWrite{
+    padding-left:.54rem;
+    height:.94rem;
+    background:url("../images/nicon2.png") no-repeat left center;
+    background-size:.29rem .29rem;
+    border-bottom:1px solid #F2F2F2;
+    font-size:0;
+}
+.layerTestWrite input{
+    display:inline-block;
+    width:100%;
+    font-size:.28rem;
+    line-height:.94rem;
+    color:#5b5b5b;
+}
+
+
 .layerTest{
     padding-top:.16rem;
 }
@@ -337,6 +419,7 @@
 }
 .layerButtonWrap{
     padding-top:.8rem;
+    padding-bottom:.72rem;
     text-align:center;
 }
 .layerButtonWrap button{
