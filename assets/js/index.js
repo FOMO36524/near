@@ -14,6 +14,15 @@ let layerEvent=function(data){
         }
     });
 };
+let layerBtnEvent=function(data){
+    layer.open({
+        content: 'Error:Timed out or '+data||'other'
+        ,btn: '确定'
+        ,end: function(){
+            layer.closeAll()
+        }
+    });
+};
 let formattedNumber=function(num) {
     var num = (num || 0).toString();
     var len= parseInt(num.length)-2
@@ -24,6 +33,18 @@ let formattedNumber=function(num) {
     }
     if (num) { result = num + result; }
     return result;
+};
+let formattedEvent=function(nums) {
+    var num1 = (nums.split('.')[0] || 0).toString();
+    var num2 = (nums.split('.')[1] || '00').toString();
+    var len1= parseInt(num1.length)-2;
+    var result1 = '';
+    while (num1.length > 4) {
+        result1 = ' , ' + num1.slice(-3) + result1;
+        num1 = num1.slice(0, num1.length - 3);
+    }
+    if (num1) { result1 = num1 + result1; }
+    return result1+'.'+num2;
 };
 
 let getAccountUnstakedBalance=new Promise(function(resolve, reject){
@@ -134,7 +155,7 @@ let depositEvent=function(){
                     layer.closeAll();
                     layerEvent('get_epoch_height is error');
                 } else {
-                    layerEvent('Deposit is ok');
+                    layerEvent('success');
                     setTimeout(function(){
                         location.reload();
                     },1500)
@@ -148,7 +169,7 @@ let depositEvent=function(){
                     layer.closeAll();
                     layerEvent('withdraw is error');
                 } else {
-                    layerEvent('Withdraw is ok');
+                    layerEvent('success');
                     setTimeout(function(){
                         location.reload();
                     },1500)
@@ -161,7 +182,7 @@ let depositEvent=function(){
                 if (res.length != 0) {
                     layerEvent('stake is error');
                 } else {
-                    layerEvent('Stake is ok');
+                    layerEvent('success');
                     setTimeout(function(){
                         location.reload();
                     },1500)
@@ -175,7 +196,7 @@ let depositEvent=function(){
                 if (res.length != 0) {
                     layerEvent('unstake is error');
                 } else {
-                    layerEvent('Unstake is ok');
+                    layerEvent('success');
                     setTimeout(function(){
                         location.reload();
                     },1500)
@@ -191,10 +212,27 @@ let depositEvent=function(){
 };
 $(function(){
     // near detail
-    console.log(wallet)
-    wallet.account().state().then(data => {
-        console.log(data)
-        // console.log(data.amount/Math.pow(10,24))
+    // console.log(wallet)
+    // wallet.account().state().then(data => {
+    //     console.log(data)
+    //     // console.log(data.amount/Math.pow(10,24))
+    // });
+
+    if (!window.walletAccount.isSignedIn()) {
+        location.href = "login.html";
+    }
+
+    //login out
+    $(".loginOut").click(function(){
+        layer.open({
+            content: 'sign out?'
+            ,btn:['YES','NO']
+            ,yes: function(){
+                window.walletAccount.signOut();
+                layer.closeAll();
+                location.href='login.html'
+            }
+        });
     });
 
     //name
@@ -203,35 +241,35 @@ $(function(){
     //可用量
     let available=getAccountUnstakedBalance.then(res=>{
         // console.log(res);
-        $(".Available").text((parseInt(res)/radix).toFixed(2));
+        $(".Available").text(formattedEvent((parseInt(res)/radix).toFixed(2)));
         return res
     });
 
     //抵押份额
     let stakedShare=getAccountStakedShare.then(res=>{
         // console.log(res);
-        $(".StakingShare").text((parseInt(res)/radix).toFixed(2));
+        $(".StakingShare").text(formattedEvent((parseInt(res)/radix).toFixed(2)));
         return res
     });
 
     //抵押量
     let stakedBalance=getAccountStakedBalance.then(res=>{
         // console.log(res);
-        $(".StakingBalance").text((parseInt(res)/radix).toFixed(2));
+        $(".StakingBalance").text(formattedEvent((parseInt(res)/radix).toFixed(2)));
         return res
     });
 
     //总权益
     let totalBalance=getAccountTotalBalance.then(res=>{
-        // console.log(res);
-        $(".TotalBalance").text((parseInt(res)/radix).toFixed(2));
+        console.log(res);
+        $(".TotalBalance").text(formattedEvent((parseInt(res)/radix).toFixed(2)));
         return res
     });
 
     //总抵押份额
     let totalShare=getTotalShare.then(res=>{
         // console.log(res);
-        $(".TotalShare").text((parseInt(res)/radix).toFixed(2));
+        $(".TotalShare").text(formattedEvent((parseInt(res)/radix).toFixed(2)));
         return res
     });
 
@@ -251,7 +289,9 @@ $(function(){
         // console.log(stakedShare);
         // console.log(totalShare)
         let tas=stakedShare/totalShare;
-        echartEvent([stakedShare,totalShare])
+        // echartEvent([stakedShare,totalShare])
+        console.log(tas)
+        echartMineEvent(tas*100);
         return tas;
 
     });
@@ -269,24 +309,25 @@ $(function(){
     //总抵押量
     let totalStaking=getTotalStakedBalance.then(res=>{
         // console.log(res);
-        $(".TotalStaking").text((parseInt(res)/radix).toFixed(2));
+        $(".TotalStaking").text(formattedEvent((parseInt(res)/radix).toFixed(2)));
         return res
     });
 
     //当前份额单
     let sharePrice=Promise.all([totalStaking,totalShare]).then(([totalStaking,totalShare])=>{
-        // console.log(totalBalance,available,stakedBalance);
+        console.log(totalStaking,totalShare);
         let tp=totalStaking/totalShare;
         return tp;
 
     });
+
     sharePrice.then(res=>{
-        $(".SharePrice").text((parseInt(res)).toFixed(2));
+        $(".SharePrice").text(formattedEvent(Number(res.toString().match(/^\d+(?:\.\d{0,4})?/)).toString()));
     });
 
     //抽成比例
     let rewardFeeRate=getRewardFeeFraction.then(res=>{
-        $(".RewardFeeRate").text(res.numerator/res.denominator+'%');
+        $(".RewardFeeRate").text((res.numerator/res.denominator)*100+'%');
         return res
     });
 
@@ -305,14 +346,19 @@ $(function(){
             let user=$(".boxTopIcon").text();
             let Available=$(".Available").text();
             let StakingShare=$(".StakingShare").text();
-            let innerAccount;
+            let innerAccount='0';
+            let layerName=userName||'/';
 
             await wallet.account().state().then(data => {
                 // console.log(data)
-                innerAccount=(parseInt(data.amount)/radix).toFixed(2)
+                innerAccount=formattedEvent((parseInt(data.amount)/radix).toFixed(2))
+            }).catch(err=>{
+                layerBtnEvent(err)
             });
 
             $(".layerValTest").val('');
+            $(".niconTogB").show();
+            $(".niconTogA").show();
 
 
             switch(type) {
@@ -321,8 +367,8 @@ $(function(){
                     $(".neTag2").attr('src','assets/images/ne01.png');
                     // $(".isShow").hide();
 
-                    $(".fromName").text(userName);
-                    $(".toName").text('Inner account');
+                    $(".fromName").text(layerName);
+                    $(".toName").text('Inner balance');
                     $(".layerWriteName").text('Deposit amount');
 
                     $(".fromBalanceQuantity").text(innerAccount);
@@ -333,8 +379,8 @@ $(function(){
                     $(".neTag2").attr('src','assets/images/ne03.png');
                     // $(".isShow").hide();
 
-                    $(".fromName").text('Inner account');
-                    $(".toName").text(userName);
+                    $(".fromName").text('Inner balance');
+                    $(".toName").text(layerName);
                     $(".layerWriteName").text('Withdraw amount');
 
                     $(".fromBalanceQuantity").text(Available);
@@ -345,12 +391,15 @@ $(function(){
                     $(".neTag2").attr('src','assets/images/ne04.png');
                     // $(".isShow").show();
 
-                    $(".fromName").text('Inner account');
+                    $(".fromName").text('Inner balance');
                     $(".toName").text('Staking share');
                     $(".layerWriteName").text('Stake amount');
 
                     $(".fromBalanceQuantity").text(Available);
                     $(".toBalanceQuantity").text(StakingShare);
+
+                    $(".niconTogB").hide();
+                    $(".niconTogA").show();
                     break;
                 case 'Unstake':
                     $(".neTag1").attr('src','assets/images/ne04.png');
@@ -358,11 +407,14 @@ $(function(){
                     // $(".isShow").show();
 
                     $(".fromName").text('Staking share');
-                    $(".toName").text('Inner account');
+                    $(".toName").text('Inner balance');
                     $(".layerWriteName").text('Unstake amount');
 
                     $(".fromBalanceQuantity").text(StakingShare);
                     $(".toBalanceQuantity").text(Available);
+
+                    $(".niconTogA").hide();
+                    $(".niconTogB").show();
                     break;
                 default:
                     layerEvent('error');

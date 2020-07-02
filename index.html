@@ -6,31 +6,30 @@
             name="viewport"
             content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <title>NEAR名片</title>
+    <title>NEAR Staking Pool</title>
     <link href="./assets/css/reset.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/index.css" rel="stylesheet" type="text/css" />
     <link href="./assets/css/layer.css" rel="stylesheet" type="text/css" />
     <script src="assets/js/offset.js"></script>
-    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=KOmVjPVUAey1G2E8zNhPiuQ6QiEmAwZu&__ec_v__=20190126"></script>
 </head>
 <body>
 
 <div class="login-wrap">
     <div class="users">
         <img src="assets/images/t001.png" alt="user">
+        <button class="loginOut"></button>
     </div>
     <div class="detailWrap">
         <div class="detailBoxBg">
             <img src="assets/images/bg3.png" alt="img">
             <div class="boxTopIcon">
-                Petter@123
-                <!--<img src="assets/images/btn01.png" alt="btn">-->
+                /
             </div>
             <div class="detailBox">
                 <div class="detailBoxTop clearfix">
                     <div class="right">
                         <div class="canvasWrap">
-                            <div id="canvas"></div>
+                            <canvas id="canvas"></canvas>
                             <div class="canvasText"><span class="scale">0%</span></div>
                         </div>
                     </div>
@@ -73,7 +72,7 @@
             </div>
         </div>
         <div class="indexCenter">
-            <div class="owImg"><img src="assets/images/ow2.png" alt="icon"><span class="Onwer">Owner</span></div>
+            <div class="owImg"><img src="assets/images/ow2.png" alt="icon"><span class="Onwer">/</span></div>
             <div class="vaImg"><button>Cur epoch</button><span class="curEpoch">0</span></div>
         </div>
 
@@ -111,7 +110,7 @@
             <div class="layerStatusList on">
                 <img class="neTag1" src="assets/images/ne03.png" alt="status">
                 <div class="layerTestTitle fromName">Inner balance</div>
-                <div class="layerTestDetail fromBalanceQuantity">500</div>
+                <div class="layerTestDetail nicon3"><span class="fromBalanceQuantity">0</span><i class="niconTogA"></i></div>
             </div>
             <div class="layerStatusList" style="padding-top:.4rem;">
                 <img src="assets/images/ne02.png" alt="status">
@@ -119,50 +118,15 @@
             <div class="layerStatusList on">
                 <img class="neTag2" src="assets/images/ne01.png" alt="status">
                 <div class="layerTestTitle toName">Inner balance</div>
-                <div class="layerTestDetail nicon3"><span class="toBalanceQuantity">500</span><i></i></div>
+                <div class="layerTestDetail nicon3"><span class="toBalanceQuantity">0</span><i class="niconTogB"></i></div>
             </div>
         </div>
         <div class="layerWriteWrap">
-            <div class="layerWriteName">Deposit amount</div>
+            <div class="layerWriteName">/</div>
             <div class="layerTestWrite">
                 <input class="layerValTest" type="text" placeholder="0,000,000" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onpause="this.value=this.value.replace(/[^\d]/g,'')">
             </div>
         </div>
-        <!--<div class="layerTest">-->
-            <!--<div class="layerTestList">-->
-                <!--<i class="layerTestListIcon" style="background-image:url('assets/images/la01.png');width:.25rem;height:.3rem;margin-top:-.15rem;"></i>-->
-                <!--<div class="layerTestVal clearfix">-->
-                    <!--<div class="layerTestLeft" style="width:100%;"><span class="boxTopIconB">/</span></div>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layerTestList">-->
-                <!--<i class="layerTestListIcon" style="background-image:url('assets/images/la02.png');width:.28rem;height:.32rem;margin-top:-.16rem;"></i>-->
-                <!--<div class="layerTestVal clearfix">-->
-                    <!--<div class="layerTestLeft"><span class="AvailableBName">Near account</span></div>-->
-                    <!--<div class="layerTestLeft or"><span class="AvailableB">0</span></div>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layerTestList">-->
-                <!--<i class="layerTestListIcon" style="background-image:url('assets/images/la03.png');width:.32rem;height:.28rem;margin-top:-.14rem;"></i>-->
-                <!--<div class="layerTestVal clearfix">-->
-                    <!--<div class="layerTestLeft"><span class="StakingShareBName">Inner account</span></div>-->
-                    <!--<div class="layerTestLeft or"><span class="StakingShareB">0</span></div>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layerTestList isShow" style="display: none;">-->
-                <!--<i class="layerTestListIcon" style="background-image:url('assets/images/la06.png');width:.32rem;height:.28rem;margin-top:-.14rem;"></i>-->
-                <!--<div class="layerTestVal clearfix">-->
-                    <!--<div class="layerTestLeft"><span class="StakingPriceBName">Staking share</span></div>-->
-                    <!--<div class="layerTestLeft or"><span class="StakingPriceB">0</span></div>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layerTestList">-->
-                <!--<i class="layerTestListIcon" style="background-image:url('assets/images/la04.png');width:.35rem;height:.32rem;margin-top:-.16rem;"></i>-->
-                <!--<div class="layerTestVal clearfix">-->
-                    <!--<div class="layerTestLeft" style="width:100%;"><span><input class="layerValTest" type="text" placeholder="0.00" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onpause="this.value=this.value.replace(/[^\d]/g,'')"></span></div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
         <div class="layerButtonWrap">
             <button class="uploadBtn"></button>
         </div>
@@ -173,7 +137,6 @@
 <script src="./assets/js/jquery.js"></script>
 <script src="./assets/js/base64.js"></script>
 <script src="./assets/js/layer.js"></script>
-<script src="./assets/js/echarts.min.js"></script>
 <script src="./assets/js/echarts_event.js"></script>
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/main.js"></script>

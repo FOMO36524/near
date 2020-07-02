@@ -1,7 +1,7 @@
 (function() {
     // const CONTRACT_NAME = 'buildlinks_pool'; /* TODO: fill this in! */
-    // const CONTRACT_NAME = 'stakepool_buildlinks.betanet';
-    const CONTRACT_NAME = 'validator_buildlinks.betanet';
+    const CONTRACT_NAME = 'buildlinks';
+    // const CONTRACT_NAME = 'validator_buildlinks.betanet';
     const DEFAULT_ENV = 'development';
     //15
     const GAS = Math.pow(10,13).toString();

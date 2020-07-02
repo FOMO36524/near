@@ -1,62 +1,69 @@
 
-let echartEvent=function(data){
-    var dom = document.getElementById("canvas");
-    var myChart = echarts.init(dom);
-    option = null;
-    option = {
-        tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b}: {c} ({d}%)'
-        },
-        legend: {
-            orient: 'vertical',
-            left: 10,
-            data: ['直接访问', '邮件营销']
-        },
-        series: [
-            {
-                name: '访问来源',
-                type: 'pie',
-                silent: true,
-                radius: ['52%', '70%'],
-                center:['50%', '50%'],
-                avoidLabelOverlap: false,
-                hoverAnimation: false,
-                label: { //  饼图图形上的文本标签
+let echartMineEvent=function(num){
+    let canvasBoxWidth=$(".canvasWrap").outerWidth();
+    let canvasBoxHeight=$(".canvasWrap").outerHeight();
+    // console.log(canvasBoxWidth,canvasBoxHeight);
 
-                    normal: { // normal 是图形在默认状态下的样式
-                        show: true,
-                        position: 'center',
-                        color: '#fff',
-                        fontSize: 12,
-                        formatter: ((data[0]/data[1])*100).toFixed(2)+'%' // {b}:数据名； {c}：数据值； {d}：百分比，可以自定义显示内容，
-                    }
-                },
-                // label: {
-                //     show: false,
-                //     position: 'center',
-                //     fontSize: '14'
-                // },
-                color:['#0fb2f2','#f6c94a'],
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: '14',
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: [
-                    {value: data[0], name: 'Staking Share'},
-                    {value: data[1], name: 'Total Share'}
-                ]
-            }
-        ]
-    };
-    ;
-    if (option && typeof option === "object") {
-        myChart.setOption(option, true);
+    $("#canvas").attr({"width":canvasBoxWidth*2,"height":canvasBoxHeight*2});
+    $("#canvas").css({"width":canvasBoxWidth,"height":canvasBoxHeight});
+
+    var canvas = document.getElementById('canvas'), //获取canvas元素
+        context = canvas.getContext('2d'), //获取画图环境，指明为2d
+        centerX = canvas.width /2, //Canvas中心点x轴坐标
+        centerY = canvas.height /2, //Canvas中心点y轴坐标
+        radiusLen=((canvas.width)-(canvas.width/5))/2,
+        borderLen=centerX*0.2,
+        rad = Math.PI * 2 / 150, //将360度分成100份，那么每一份就是rad度
+        speed = num, //加载的快慢就靠它了
+        animateSpeedNum=0;
+
+    let colorBig="#0fb2f2";
+    let colorSig="#f6c94a";
+    let colorTxt="#fff";
+    let textSize=28;
+
+    //绘制蓝色外圈
+    function blueCircle(n) {
+        context.save();
+        context.beginPath();
+        context.strokeStyle = colorSig;
+        context.lineWidth = borderLen;
+        context.arc(centerX, centerY, radiusLen, -Math.PI / 2, -Math.PI / 2 + n * rad, false);
+        context.stroke();
+        context.restore();
     }
+
+    //绘制白色外圈
+    function whiteCircle() {
+        context.save();
+        context.beginPath();
+        context.strokeStyle = colorBig;
+        context.lineWidth = borderLen;
+        context.arc(centerX, centerY, radiusLen, 0, Math.PI * 2, false);
+        context.stroke();
+        context.closePath();
+        context.restore();
+    }
+
+    //百分比文字绘制
+    function text(n) {
+        context.save();
+        context.fillStyle = colorTxt;
+        context.font = textSize+"px Arial";
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillText(n.toFixed(2) + "%", centerX, centerY);
+        context.restore();
+    }
+    let drawFrame = setInterval(function(){
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        whiteCircle();
+        text(num);
+        blueCircle(animateSpeedNum);
+
+        if (animateSpeedNum > 150-(speed*1.5)) clearInterval(drawFrame);
+        animateSpeedNum += 0.5;
+    })
 };
+// echartMineEvent(56);

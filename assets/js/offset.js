@@ -48,7 +48,9 @@ function offset(){
 
 }
 offset();
-window.onresize=offset;
+window.onresize=function(){
+    offset();
+};
 window.onload=function(){
     offset();
 };

@@ -9,10 +9,20 @@
     padding-top:6.7vh;
     padding-bottom:3.75vh;
     padding-left:.5rem;
+    position:relative;
 }
 .users img{
     width:4.97rem;
     height:auto;
+}
+.loginOut{
+    width:.5rem;
+    height:.5rem;
+    position:absolute;
+    right:.4rem;top:50%;
+    margin-top:-.12rem;
+    background:url("../images/out.png") no-repeat center;
+    background-size:.3rem auto;
 }
 .detailWrap{
     padding:0 .3rem;
@@ -22,7 +32,9 @@
     font-size:0;
 }
 .detailBoxBg img{
-    max-width:100%;
+    /*max-width:100%;*/
+    width:100%;
+    height:auto;
 }
 .detailBox{
     padding:1rem .5rem .2rem;
@@ -59,9 +71,9 @@
     margin-bottom:.24rem;
 }
 .BTLeft{
-    font-size:.22rem;
+    font-size:.2rem;
     font-family: arial;
-    line-height:1;
+    line-height:.22rem;
     color:#fff;
     /*width:2rem;*/
     padding-left:.4rem;
@@ -96,18 +108,19 @@
     padding-left:.1rem;
 }
 .canvasWrap{
-    width:1.8rem;
+    width:1.7rem;
     height:1.7rem;
-    /*overflow:hidden;*/
+    overflow:hidden;
     position:relative;
+    margin-right:.1rem;
 }
-#canvas{
-    width:2.8rem;
-    height:2.2rem;
-    position:relative;
-    left:-.5rem;
-    top:-.25rem;
-}
+/*#canvas{*/
+    /*width:2.8rem;*/
+    /*height:2.2rem;*/
+    /*position:relative;*/
+    /*left:-.5rem;*/
+    /*top:-.25rem;*/
+/*}*/
 .canvasText{
     position:absolute;
     left:0;top:0;right:0;bottom:0;
@@ -234,11 +247,12 @@
     height:1.34rem;
     background-repeat:no-repeat;
     background-position:center;
-    background-size:cover;
+    background-size:contain;
     margin:0 auto;
     padding-right:.7rem;
     overflow:hidden;
     position:relative;
+    font-family: "Arial", arial;
 }
 .totalIcon{
     display:inline-block;
