@@ -1,6 +1,7 @@
 
 const user=wallet.getAccountId();
-const userName=wallet.getAccountId().split('.')[0];
+const userName=wallet.getAccountId();
+// const userName=wallet.getAccountId().split('.')[0];
 const radix=Math.pow(10,24);
 
 let layerEvent=function(data){

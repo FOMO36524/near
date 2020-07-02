@@ -1,8 +1,9 @@
 (function() {
     // const CONTRACT_NAME = 'buildlinks_pool'; /* TODO: fill this in! */
-    const CONTRACT_NAME = 'buildlinks';
+    const CONTRACT_NAME = 'buildlinks2';
+    // const CONTRACT_NAME = 'buildlinks';
     // const CONTRACT_NAME = 'validator_buildlinks.betanet';
-    const DEFAULT_ENV = 'development';
+    const DEFAULT_ENV = 'testnet';
     //15
     const GAS = Math.pow(10,13).toString();
 
@@ -20,11 +21,11 @@
                         keyStore: new nearApi.keyStores.BrowserLocalStorageKeyStore() // keys are stored as plaintext in LocalStorage
                     }
                 };
-            case 'staging':
+            case 'testnet':
                 return {
-                    networkId: 'default',                                             // this can be any label to namespace user accounts
-                    nodeUrl: "https://rpc.betanet.nearprotocol.com",                          // this endpoint must point to the network you want to reach
-                    walletUrl: "https://wallet.betanet.nearprotocol.com",                      // this endpoint must exist for the wallet to work
+                    networkId: 'testnet',                                             // this can be any label to namespace user accounts
+                    nodeUrl: "https://rpc.testnet.near.org",                          // this endpoint must point to the network you want to reach
+                    walletUrl: "https://wallet.testnet.near.org",                      // this endpoint must exist for the wallet to work
                     contractName: CONTRACT_NAME,
                     deps: {
                         keyStore: new nearApi.keyStores.BrowserLocalStorageKeyStore() // keys are stored as plaintext in LocalStorage
